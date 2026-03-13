@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import { getLibrary } from '../lib/library';
+import { withBase } from '../lib/paths';
+
+const library = await getLibrary();
+
+function pickLocalized(record: Record<string, string> | undefined, fallback: string): string | undefined {
+  return record?.[fallback] ?? Object.values(record ?? {})[0];
+}
+---
+
+<BaseLayout
+  title="Dual Reader Starter"
+  description="A starter repo for a markdown-driven dual-language reader on GitHub Pages."
+>
+  <section class="hero card">
+    <p class="eyebrow">Static, typed, alignment-aware</p>
+    <h1>Markdown books with sentence-level pairing.</h1>
+    <p class="lead">
+      This starter keeps the site static, the content repo-friendly, and the bilingual interaction in
+      a lightweight client script.
+    </p>
+    <div class="hero-actions">
+      <a class="button button--primary" href="#books">Open the sample library</a>
+      <a class="button" href={withBase('docs/design/')}>Read the design doc</a>
+    </div>
+  </section>
+
+  <section id="books" class="stack-lg">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Books</p>
+        <h2>Library</h2>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      {
+        library.books.map((book) => {
+          const title = pickLocalized(book.config.title, book.config.defaultPrimary) ?? book.config.slug;
+          const summary = pickLocalized(book.config.summary, book.config.defaultPrimary);
+          const firstChapter = book.chapters[0];
+
+          return (
+            <article class="card book-card">
+              <div class="book-card__meta">
+                <div class="badges">
+                  {book.config.languages.map((language) => (
+                    <span class="badge">{language.label}</span>
+                  ))}
+                </div>
+                <span class="muted">{book.chapters.length} chapter(s)</span>
+              </div>
+              <h3>{title}</h3>
+              {summary && <p>{summary}</p>}
+              <div class="book-card__actions">
+                <a class="button button--primary" href={withBase(`books/${book.config.slug}/`)}>
+                  Book page
+                </a>
+                {firstChapter && (
+                  <a class="button" href={withBase(`books/${book.config.slug}/${firstChapter.slug}/`)}>
+                    Start reading
+                  </a>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>

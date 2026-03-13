@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro';
+import { getLibrary } from '../../../lib/library';
+import { withBase } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  const library = await getLibrary();
+
+  return library.books.map((book) => ({
+    params: { book: book.config.slug },
+    props: { book }
+  }));
+}
+
+const { book } = Astro.props;
+const pageTitle = `${book.config.title[book.config.defaultPrimary] ?? book.config.slug} · Dual Reader`;
+const pageDescription =
+  book.config.summary?.[book.config.defaultPrimary] ??
+  Object.values(book.config.summary ?? {})[0] ??
+  'Book overview';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} lang={book.config.defaultPrimary}>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href={withBase()}>Library</a>
+    <span aria-hidden="true">/</span>
+    <span>{book.config.title[book.config.defaultPrimary] ?? book.config.slug}</span>
+  </nav>
+
+  <section class="card stack-md">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Book</p>
+        <h1>{book.config.title[book.config.defaultPrimary] ?? book.config.slug}</h1>
+      </div>
+      <div class="badges">
+        {book.config.languages.map((language) => (
+          <span class="badge">{language.label}</span>
+        ))}
+      </div>
+    </div>
+
+    {
+      (book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]) && (
+        <p class="lead">
+          {book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]}
+        </p>
+      )
+    }
+
+    <section class="chapter-list stack-md">
+      <h2>Chapters</h2>
+      <div class="stack-sm">
+        {book.chapters.map((chapter) => {
+          const label = chapter.titles[book.config.defaultPrimary] ?? Object.values(chapter.titles)[0];
+          return (
+            <a class="chapter-card" href={withBase(`books/${book.config.slug}/${chapter.slug}/`)}>
+              <span class="chapter-card__eyebrow">Chapter {chapter.order || chapter.slug}</span>
+              <strong>{label}</strong>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </section>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import type { ChapterData, LanguageMeta } from '../lib/types';
+
+interface Props {
+  bookTitle: string;
+  chapter: ChapterData;
+  languages: LanguageMeta[];
+  defaultPrimary: string;
+  defaultSecondary?: string;
+}
+
+const { bookTitle, chapter, languages, defaultPrimary, defaultSecondary } = Astro.props;
+const payload = JSON.stringify({
+  bookTitle,
+  chapter,
+  languages,
+  defaultPrimary,
+  defaultSecondary
+}).replace(/</g, '\\u003c');
+---
+
+<section class="reader-shell" data-dual-reader-root data-layout="focus">
+  <header class="reader-toolbar">
+    <div class="reader-toolbar__group">
+      <label class="reader-select">
+        <span>Primary</span>
+        <select data-role="primary-language"></select>
+      </label>
+      <label class="reader-select">
+        <span>Secondary</span>
+        <select data-role="secondary-language"></select>
+      </label>
+      <button type="button" class="reader-button" data-role="swap-languages">
+        Swap
+      </button>
+    </div>
+
+    <div class="reader-toolbar__group" role="group" aria-label="Layout options">
+      <button type="button" class="reader-button" data-layout-button="focus">Focus</button>
+      <button type="button" class="reader-button" data-layout-button="split">Split</button>
+      <button type="button" class="reader-button" data-layout-button="stacked">Stacked</button>
+    </div>
+  </header>
+
+  <div class="reader-panels">
+    <article class="reader-panel reader-panel--primary" data-role="primary-panel"></article>
+    <article class="reader-panel reader-panel--secondary" data-role="secondary-panel"></article>
+    <aside class="reader-peek" data-role="peek-panel" aria-live="polite"></aside>
+  </div>
+
+  <script type="application/json" data-role="payload" set:html={payload}></script>
+</section>
+
+<script>
+  import { mountAllDualReaders } from '../scripts/dual-reader';
+
+  mountAllDualReaders();
+</script>

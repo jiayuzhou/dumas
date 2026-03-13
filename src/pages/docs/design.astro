@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+
+const bullets = [
+  'Static-first architecture for GitHub Pages.',
+  'Markdown chapter files plus YAML alignment units.',
+  'Language-neutral alignment model instead of hard-coded left/right pairs.',
+  'A lightweight client reader with focus, split, and stacked layouts.',
+  'Strict build-time validation for content consistency.'
+];
+---
+
+<BaseLayout title="Design Summary · Dual Reader" description="Architecture summary for the dual-language reader starter.">
+  <section class="card stack-md">
+    <p class="eyebrow">Design summary</p>
+    <h1>How the starter is shaped</h1>
+    <p class="lead">
+      The full design documents live in the repository under <code>docs/</code>. This page gives the short architectural sketch.
+    </p>
+
+    <div class="stack-sm">
+      {bullets.map((item) => <p>• {item}</p>)}
+    </div>
+
+    <section class="stack-sm">
+      <h2>Repository docs</h2>
+      <p>Open these in the repo for the detailed spec:</p>
+      <p><code>docs/design.md</code></p>
+      <p><code>docs/chapter-schema.md</code></p>
+      <p><code>docs/reader-contract.md</code></p>
+      <p><code>AGENTS.md</code></p>
+    </section>
+  </section>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/paths';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: string;
+}
+
+const {
+  title,
+  description = 'A static dual-language reader built with Astro.',
+  lang = 'en'
+} = Astro.props;
+
+const homeHref = withBase();
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#6957f7" />
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a href={homeHref} class="site-brand">
+          <span class="site-brand__mark">∥</span>
+          <span>Dual Reader</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href={homeHref}>Library</a>
+          <a href={withBase('docs/design/')}>Design</a>
+        </nav>
+      </header>
+      <main class="site-main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

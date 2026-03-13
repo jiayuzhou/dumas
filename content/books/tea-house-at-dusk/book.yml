@@ -1,0 +1,21 @@
+id: tea-house-at-dusk
+slug: tea-house-at-dusk
+title:
+  en: The Tea House at Dusk
+  zh-Hans: 黄昏茶馆
+summary:
+  en: A tiny original micro-story used to demonstrate sentence alignment, language switching, and focus reading.
+  zh-Hans: 一则原创微型故事，用来演示句子对齐、语言切换和专注阅读。
+languages:
+  - code: en
+    label: English
+    dir: ltr
+    locale: en
+    sentenceJoiner: space
+  - code: zh-Hans
+    label: 简体中文
+    dir: ltr
+    locale: zh-Hans
+    sentenceJoiner: none
+defaultPrimary: zh-Hans
+defaultSecondary: en

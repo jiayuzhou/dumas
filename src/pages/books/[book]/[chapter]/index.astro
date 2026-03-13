@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../../../components/BaseLayout.astro';
+import ReaderShell from '../../../../components/ReaderShell.astro';
+import { getLibrary } from '../../../../lib/library';
+import { withBase } from '../../../../lib/paths';
+
+export async function getStaticPaths() {
+  const library = await getLibrary();
+
+  return library.books.flatMap((book) =>
+    book.chapters.map((chapter) => ({
+      params: { book: book.config.slug, chapter: chapter.slug },
+      props: { book, chapter }
+    }))
+  );
+}
+
+const { book, chapter } = Astro.props;
+const chapterTitle = chapter.titles[book.config.defaultPrimary] ?? Object.values(chapter.titles)[0];
+const bookTitle = book.config.title[book.config.defaultPrimary] ?? book.config.slug;
+const pageTitle = `${chapterTitle} · ${bookTitle}`;
+const pageDescription =
+  chapter.descriptions[book.config.defaultPrimary] ??
+  Object.values(chapter.descriptions)[0] ??
+  `Read ${chapterTitle} in a dual-language reader.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} lang={book.config.defaultPrimary}>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href={withBase()}>Library</a>
+    <span aria-hidden="true">/</span>
+    <a href={withBase(`books/${book.config.slug}/`)}>{bookTitle}</a>
+    <span aria-hidden="true">/</span>
+    <span>{chapterTitle}</span>
+  </nav>
+
+  <section class="page-heading">
+    <div>
+      <p class="eyebrow">Reader</p>
+      <h1>{chapterTitle}</h1>
+      <p class="lead">Click any sentence to reveal or synchronize its aligned counterpart.</p>
+    </div>
+  </section>
+
+  <ReaderShell
+    bookTitle={bookTitle}
+    chapter={chapter}
+    languages={book.config.languages}
+    defaultPrimary={book.config.defaultPrimary}
+    defaultSecondary={book.config.defaultSecondary}
+  />
+</BaseLayout>

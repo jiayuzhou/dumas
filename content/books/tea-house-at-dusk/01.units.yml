@@ -1,0 +1,14 @@
+units:
+  - id: u001
+    en: [en-010]
+    zh-Hans: [zh-010]
+  - id: u002
+    en: [en-020]
+    zh-Hans: [zh-020]
+  - id: u003
+    en: [en-030]
+    zh-Hans: [zh-030]
+  - id: u004
+    en: [en-040, en-050]
+    zh-Hans: [zh-040, zh-050]
+    note: Example of a many-to-many alignment unit.
