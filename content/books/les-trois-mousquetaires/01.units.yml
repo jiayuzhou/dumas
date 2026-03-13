@@ -1,0 +1,118 @@
+units:
+  - id: u001
+    fr: [fr-010]
+    en: [en-010]
+  - id: u002
+    fr: [fr-020]
+    en: [en-020]
+  - id: u003
+    fr: [fr-030]
+    en: [en-030]
+  - id: u004
+    fr: [fr-040]
+    en: [en-040]
+  - id: u005
+    fr: [fr-050]
+    en: [en-050]
+  - id: u006
+    fr: [fr-060]
+    en: [en-060]
+  - id: u007
+    fr: [fr-070]
+    en: [en-070]
+  - id: u008
+    fr: [fr-080]
+    en: [en-080]
+  - id: u009
+    fr: [fr-090]
+    en: [en-090]
+  - id: u010
+    fr: [fr-100]
+    en: [en-100]
+  - id: u011
+    fr: [fr-110]
+    en: [en-110]
+  - id: u012
+    fr: [fr-120]
+    en: [en-120]
+  - id: u013
+    fr: [fr-130]
+    en: [en-130]
+  - id: u014
+    fr: [fr-140]
+    en: [en-140]
+  - id: u015
+    fr: [fr-150]
+    en: [en-150]
+  - id: u016
+    fr: [fr-160]
+    en: [en-160]
+  - id: u017
+    fr: [fr-170]
+    en: [en-170]
+  - id: u018
+    fr: [fr-180]
+    en: [en-180]
+  - id: u019
+    fr: [fr-190]
+    en: [en-190]
+  - id: u020
+    fr: [fr-200]
+    en: [en-200]
+  - id: u021
+    fr: [fr-210]
+    en: [en-210]
+  - id: u022
+    fr: [fr-220]
+    en: [en-220]
+  - id: u023
+    fr: [fr-230]
+    en: [en-230]
+  - id: u024
+    fr: [fr-240]
+    en: [en-240]
+  - id: u025
+    fr: [fr-250]
+    en: [en-250]
+  - id: u026
+    fr: [fr-260]
+    en: [en-260]
+  - id: u027
+    fr: [fr-270]
+    en: [en-270]
+  - id: u028
+    fr: [fr-280]
+    en: [en-280]
+  - id: u029
+    fr: [fr-290]
+    en: [en-290]
+  - id: u030
+    fr: [fr-300]
+    en: [en-300]
+  - id: u031
+    fr: [fr-310]
+    en: [en-310]
+  - id: u032
+    fr: [fr-320]
+    en: [en-320]
+  - id: u033
+    fr: [fr-330]
+    en: [en-330]
+  - id: u034
+    fr: [fr-340]
+    en: [en-340]
+  - id: u035
+    fr: [fr-350]
+    en: [en-350]
+  - id: u036
+    fr: [fr-360]
+    en: [en-360]
+  - id: u037
+    fr: [fr-370]
+    en: [en-370]
+  - id: u038
+    fr: [fr-380]
+    en: [en-380]
+  - id: u039
+    fr: [fr-390]
+    en: [en-390]

@@ -1,0 +1,17 @@
+units:
+  - id: u101
+    fr: [fr-110]
+    en: [en-110]
+  - id: u102
+    fr: [fr-120]
+    en: [en-120]
+  - id: u103
+    fr: [fr-130]
+    en: [en-130]
+  - id: u104
+    fr: [fr-140]
+    en: [en-140]
+  - id: u105
+    fr: [fr-150]
+    en: [en-150]
+

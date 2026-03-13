@@ -1,0 +1,23 @@
+units:
+  - id: u001
+    fr: [fr-010]
+    en: [en-010]
+  - id: u002
+    fr: [fr-020]
+    en: [en-020]
+  - id: u003
+    fr: [fr-030]
+    en: [en-030]
+  - id: u004
+    fr: [fr-040]
+    en: [en-040]
+  - id: u005
+    fr: [fr-050]
+    en: [en-050]
+  - id: u006
+    fr: [fr-060]
+    en: [en-060]
+  - id: u007
+    fr: [fr-070]
+    en: [en-070]
+

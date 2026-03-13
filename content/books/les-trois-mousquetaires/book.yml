@@ -1,0 +1,22 @@
+id: les-trois-mousquetaires
+slug: les-trois-mousquetaires
+title:
+  fr: Les Trois Mousquetaires
+  en: The Three Musketeers
+summary:
+  fr: Extraits bilingues (français-anglais) avec alignement phrase à phrase.
+  en: Bilingual excerpts (French–English) with sentence-level alignment.
+languages:
+  - code: fr
+    label: Français
+    dir: ltr
+    locale: fr
+    sentenceJoiner: space
+  - code: en
+    label: English
+    dir: ltr
+    locale: en
+    sentenceJoiner: space
+defaultPrimary: fr
+defaultSecondary: en
+

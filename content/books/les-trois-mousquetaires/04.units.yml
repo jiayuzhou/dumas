@@ -1,0 +1,38 @@
+units:
+  - id: u001
+    fr: [fr-010]
+    en: [en-010]
+  - id: u002
+    fr: [fr-020]
+    en: [en-020]
+  - id: u003
+    fr: [fr-030]
+    en: [en-030]
+  - id: u004
+    fr: [fr-040]
+    en: [en-040]
+  - id: u005
+    fr: [fr-050]
+    en: [en-050]
+  - id: u006
+    fr: [fr-060]
+    en: [en-060]
+  - id: u007
+    fr: [fr-070]
+    en: [en-070]
+  - id: u008
+    fr: [fr-080]
+    en: [en-080]
+  - id: u009
+    fr: [fr-090]
+    en: [en-090]
+  - id: u010
+    fr: [fr-100]
+    en: [en-100]
+  - id: u011
+    fr: [fr-110]
+    en: [en-110]
+  - id: u012
+    fr: [fr-120]
+    en: [en-120]
+
