@@ -37,6 +37,9 @@ function mountDualReader(root: HTMLElement) {
   const secondarySelect = root.querySelector<HTMLSelectElement>('[data-role="secondary-language"]');
   const swapButton = root.querySelector<HTMLButtonElement>('[data-role="swap-languages"]');
   const layoutButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-layout-button]')];
+  const toolbar = root.querySelector<HTMLElement>('[data-role="toolbar"]');
+  const toolbarToggle = root.querySelector<HTMLButtonElement>('[data-role="toolbar-toggle"]');
+  const toolbarSummary = root.querySelector<HTMLElement>('[data-role="toolbar-summary"]');
 
   if (
     !payloadNode ||
@@ -107,6 +110,13 @@ function mountDualReader(root: HTMLElement) {
       const isActive = layout === state.layout;
       button.classList.toggle('reader-button--active', isActive);
       button.setAttribute('aria-pressed', String(isActive));
+    }
+
+    if (toolbarSummary) {
+      const primaryLabel = languageMap.get(state.primary)?.label ?? state.primary;
+      const secondaryLabel = languageMap.get(state.secondary)?.label ?? state.secondary;
+      const layoutLabel = state.layout.charAt(0).toUpperCase() + state.layout.slice(1);
+      toolbarSummary.textContent = `${primaryLabel} · ${secondaryLabel} · ${layoutLabel}`;
     }
   }
 
@@ -406,6 +416,11 @@ function mountDualReader(root: HTMLElement) {
       persistSettings();
     });
   }
+
+  toolbarToggle?.addEventListener('click', () => {
+    const isExpanded = toolbar?.classList.toggle('reader-toolbar--expanded') ?? false;
+    toolbarToggle.setAttribute('aria-expanded', String(isExpanded));
+  });
 
   refreshToolbar();
   renderPanels();

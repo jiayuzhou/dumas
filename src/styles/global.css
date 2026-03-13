@@ -548,6 +548,51 @@ ol {
   .chapter-card {
     align-items: flex-start;
   }
+
+  /* Toggle button */
+  .reader-toolbar__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.15rem 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .reader-toolbar__summary {
+    flex: 1;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .reader-toolbar__toggle-icon::before {
+    content: '⚙';
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+
+  .reader-toolbar--expanded .reader-toolbar__toggle-icon::before {
+    content: '✕';
+  }
+
+  /* Hide groups when collapsed */
+  .reader-toolbar:not(.reader-toolbar--expanded) .reader-toolbar__group {
+    display: none;
+  }
+
+  .reader-toolbar:not(.reader-toolbar--expanded) {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Toggle button — hidden on desktop */
+.reader-toolbar__toggle {
+  display: none;
 }
 
 @media (max-width: 720px) {
