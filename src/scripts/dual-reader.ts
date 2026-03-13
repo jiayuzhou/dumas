@@ -190,6 +190,7 @@ function mountDualReader(root: HTMLElement) {
   }
 
   function renderPeekPanel() {
+    peekPanel.classList.toggle('reader-peek--visible', state.activeSentenceId !== null);
     peekPanel.innerHTML = '';
 
     const header = document.createElement('div');
