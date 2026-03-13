@@ -511,6 +511,11 @@ ol {
   padding: 0.2rem 0;
 }
 
+/* Toggle button — hidden on desktop, shown via media query below */
+.reader-toolbar__toggle {
+  display: none;
+}
+
 @media (max-width: 960px) {
   .reader-shell[data-layout='focus'] .reader-panels,
   .reader-shell[data-layout='split'] .reader-panels,
@@ -588,11 +593,6 @@ ol {
   .reader-toolbar:not(.reader-toolbar--expanded) {
     padding: 0.75rem 1rem;
   }
-}
-
-/* Toggle button — hidden on desktop */
-.reader-toolbar__toggle {
-  display: none;
 }
 
 @media (max-width: 720px) {
