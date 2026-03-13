@@ -1,51 +1,49 @@
-# AGENTS
+# Repository Guidelines
 
-This file tells coding agents how to work in this repository without inventing bugs for sport.
+Concise contributor guide for this dual-language reader starter. Keep the site static-compatible, align sentences as data, and favor explicit validation over silent fallback.
 
-## Core rules
+## Project Structure & Module Organization
 
-- Preserve the **alignment unit** model.
-- Never collapse the domain into hard-coded left/right language pairs.
-- Keep the site static-compatible for GitHub Pages.
-- Prefer explicit validation failures over silent fallback behavior.
-- Preserve stable sentence ids unless a migration is deliberate and documented.
+- Content: `content/books/<book>/` with `book.yml`, `<chapter>.<lang>.md`, `<chapter>.units.yml`.
+- Source: `src/` (Astro pages, components, styles). Normalization lives in `src/lib/library.ts`.
+- Reader runtime: `src/scripts/dual-reader.ts` (mounts, state, events).
+- Docs: `docs/` (design, schema, reader contract). Utilities in `scripts/`.
 
-## Content rules
+Example chapter files:
+`content/books/tea-house-at-dusk/01.en.md`, `01.zh-Hans.md`, `01.units.yml`.
 
-- Book metadata lives in `content/books/<book>/book.yml`.
-- Chapter text lives in `content/books/<book>/<chapter>.<lang>.md`.
-- Alignment data lives in `content/books/<book>/<chapter>.units.yml`.
-- Sentence lines must use `@<sentence-id> ...` syntax.
-- Notes and headings are language-local unless a later schema explicitly changes that.
+## Build, Test, and Development Commands
 
-## Code rules
+- `npm run dev`: Start Astro dev server.
+- `npm run validate:library`: Validate content model (books, chapters, units).
+- `npm run check`: Type and Astro diagnostics.
+- `npm run build`: Validate then build static site for GitHub Pages.
 
-- `src/lib/library.ts` is the canonical normalization layer.
-- Reader runtime state lives in `src/scripts/dual-reader.ts`.
-- Do not re-parse canonical markdown in the browser.
-- New reader features should prefer emitted events over tight coupling.
+## Coding Style & Naming Conventions
 
-## Validation rules
+- TypeScript, ES modules. Prefer small, pure functions in `src/lib`.
+- Do not parse markdown in the browser; use normalized `ChapterData` only.
+- Sentence lines: `@<sentence-id> <markdown>`, e.g., `@en-010 Bells chimed.`
+- Filenames: `<chapter-stem>.<lang>.md` and `<chapter-stem>.units.yml` (e.g., `02.en.md`).
 
-Do not relax these without a strong reason:
+## Testing Guidelines
 
-- duplicate sentence ids should fail the build
-- unknown sentence ids in units files should fail the build
-- sentences assigned to multiple units should fail the build
-- missing chapter-language files for declared languages should fail the build
+- Treat validation as tests: run `npm run validate:library` and `npm run check` before PRs.
+- Validation must fail on: duplicate sentence ids, unknown unit references, multi-assigned sentences, or missing chapter-language files.
 
-## UI rules
+## Commit & Pull Request Guidelines
 
-- Default to focus reading, not comparison overload.
-- Keep primary and secondary language selectors independent of layout.
-- Any layout feature must work on mobile.
-- Styling should help reading, not fight it.
+- Commits: imperative mood, scoped changes, reference issues (`Fix reader layout (#123)`).
+- PRs: clear description, rationale, and screenshots/GIFs for UI changes. Link issues and include reproduction steps.
+- Do not change sentence ids unless performing a deliberate, documented migration.
 
-## Documentation rules
+## Agent-Specific Rules
 
-When changing architecture or contracts, update:
+- Preserve the alignment-unit model; never hard-code left/right language pairs.
+- Keep primary/secondary language selectors independent of layout; all layouts must work on mobile.
+- Prefer emitted events over tight coupling in the reader.
 
-- `docs/design.md`
-- `docs/chapter-schema.md`
-- `docs/reader-contract.md`
-- `README.md` if setup or authoring changed
+## Security & Configuration Tips
+
+- Configure `astro.config.mjs` for GitHub Pages (`site`, `base`, `output: 'static'`).
+- No server runtime or network calls in the reader; keep it static-friendly.
