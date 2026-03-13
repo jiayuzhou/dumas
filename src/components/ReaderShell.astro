@@ -20,7 +20,12 @@ const payload = JSON.stringify({
 ---
 
 <section class="reader-shell" data-dual-reader-root data-layout="focus">
-  <header class="reader-toolbar">
+  <header class="reader-toolbar" data-role="toolbar">
+    <button type="button" class="reader-toolbar__toggle" data-role="toolbar-toggle" aria-label="Reader settings" aria-expanded="false">
+      <span data-role="toolbar-summary" class="reader-toolbar__summary"></span>
+      <span class="reader-toolbar__toggle-icon" aria-hidden="true"></span>
+    </button>
+
     <div class="reader-toolbar__group">
       <label class="reader-select">
         <span>Primary</span>
