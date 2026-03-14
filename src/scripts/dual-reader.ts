@@ -40,6 +40,9 @@ function mountDualReader(root: HTMLElement) {
   const toolbar = root.querySelector<HTMLElement>('[data-role="toolbar"]');
   const toolbarToggle = root.querySelector<HTMLButtonElement>('[data-role="toolbar-toggle"]');
   const toolbarSummary = root.querySelector<HTMLElement>('[data-role="toolbar-summary"]');
+  const fontDecreaseButton = root.querySelector<HTMLButtonElement>('[data-role="font-decrease"]');
+  const fontIncreaseButton = root.querySelector<HTMLButtonElement>('[data-role="font-increase"]');
+  const fontSizeLabel = root.querySelector<HTMLElement>('[data-role="font-size-label"]');
 
   if (
     !payloadNode ||
@@ -70,6 +73,12 @@ function mountDualReader(root: HTMLElement) {
     saved?.secondary ?? payload.defaultSecondary,
     payload.languages.map((language) => language.code)
   );
+
+  const FONT_SIZE_MIN = 75;
+  const FONT_SIZE_MAX = 150;
+  const FONT_SIZE_STEP = 10;
+  const fontSizeKey = `dual-reader-fontsize:${payload.chapter.bookId}`;
+  let fontSize = readSavedFontSize(fontSizeKey);
 
   const state: ReaderState = {
     primary: initialPrimary,
@@ -417,6 +426,33 @@ function mountDualReader(root: HTMLElement) {
     });
   }
 
+  function applyFontSize() {
+    const panels = root.querySelector<HTMLElement>('.reader-panels');
+    if (panels) {
+      panels.style.fontSize = fontSize === 100 ? '' : `${fontSize}%`;
+    }
+    if (fontSizeLabel) {
+      fontSizeLabel.textContent = `${fontSize}%`;
+    }
+    if (fontDecreaseButton) {
+      fontDecreaseButton.disabled = fontSize <= FONT_SIZE_MIN;
+    }
+    if (fontIncreaseButton) {
+      fontIncreaseButton.disabled = fontSize >= FONT_SIZE_MAX;
+    }
+    localStorage.setItem(fontSizeKey, String(fontSize));
+  }
+
+  fontDecreaseButton?.addEventListener('click', () => {
+    fontSize = Math.max(FONT_SIZE_MIN, fontSize - FONT_SIZE_STEP);
+    applyFontSize();
+  });
+
+  fontIncreaseButton?.addEventListener('click', () => {
+    fontSize = Math.min(FONT_SIZE_MAX, fontSize + FONT_SIZE_STEP);
+    applyFontSize();
+  });
+
   toolbarToggle?.addEventListener('click', () => {
     const isExpanded = toolbar?.classList.toggle('reader-toolbar--expanded') ?? false;
     toolbarToggle.setAttribute('aria-expanded', String(isExpanded));
@@ -425,6 +461,7 @@ function mountDualReader(root: HTMLElement) {
   refreshToolbar();
   renderPanels();
   persistSettings();
+  applyFontSize();
 
   root.dispatchEvent(
     new CustomEvent('reader:ready', {
@@ -504,6 +541,18 @@ function chooseSecondaryLanguage(
   const filtered = allowed.filter((language) => language !== primary);
   if (preferred && filtered.includes(preferred)) return preferred;
   return filtered[0] ?? primary;
+}
+
+function readSavedFontSize(key: string): number {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return 100;
+    const parsed = parseInt(raw, 10);
+    if (isNaN(parsed) || parsed < 75 || parsed > 150) return 100;
+    return parsed;
+  } catch {
+    return 100;
+  }
 }
 
 function escapeHtml(value: string) {
