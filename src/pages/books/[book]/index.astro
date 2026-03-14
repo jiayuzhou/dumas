@@ -27,17 +27,19 @@ const pageDescription =
     <span>{book.config.title[book.config.defaultPrimary] ?? book.config.slug}</span>
   </nav>
 
-  <section class="card stack-md">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Book</p>
-        <h1>{book.config.title[book.config.defaultPrimary] ?? book.config.slug}</h1>
-      </div>
-      <div class="badges">
+  <section class="card book-overview stack-md">
+    <div>
+      <div class="badges" style="margin-bottom: 0.75rem;">
         {book.config.languages.map((language) => (
           <span class="badge">{language.label}</span>
         ))}
       </div>
+      <h1 style="margin: 0;">{book.config.title[book.config.defaultPrimary] ?? book.config.slug}</h1>
+      {book.config.title[book.config.defaultSecondary ?? ''] && (
+        <p class="muted" style="margin-top: 0.3rem; font-size: 1.1rem;">
+          {book.config.title[book.config.defaultSecondary ?? '']}
+        </p>
+      )}
     </div>
 
     {
@@ -52,11 +54,14 @@ const pageDescription =
       <h2>Chapters</h2>
       <div class="stack-sm">
         {book.chapters.map((chapter) => {
-          const label = chapter.titles[book.config.defaultPrimary] ?? Object.values(chapter.titles)[0];
+          const primaryTitle = chapter.titles[book.config.defaultPrimary] ?? Object.values(chapter.titles)[0];
+          const secondaryTitle = chapter.titles[book.config.defaultSecondary ?? ''] ?? Object.values(chapter.titles).find((t) => t !== primaryTitle);
           return (
             <a class="chapter-card" href={withBase(`books/${book.config.slug}/${chapter.slug}/`)}>
-              <span class="chapter-card__eyebrow">Chapter {chapter.order || chapter.slug}</span>
-              <strong>{label}</strong>
+              <strong>{primaryTitle}</strong>
+              {secondaryTitle && secondaryTitle !== primaryTitle && (
+                <span class="chapter-card__subtitle">{secondaryTitle}</span>
+              )}
             </a>
           );
         })}

@@ -210,8 +210,7 @@ ol {
 .reader-panel__header,
 .reader-toolbar,
 .reader-toolbar__group,
-.reader-peek__header,
-.chapter-card {
+.reader-peek__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -307,15 +306,23 @@ ol {
   margin: 0;
 }
 
+.book-overview {
+  padding: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+}
+
 .chapter-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   padding: 1rem 1.15rem;
   border-radius: var(--radius-md);
   color: inherit;
 }
 
-.chapter-card__eyebrow {
+.chapter-card__subtitle {
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
 .reader-shell {
@@ -593,8 +600,7 @@ ol {
   .section-heading,
   .page-heading,
   .reader-panel__header,
-  .reader-peek__header,
-  .chapter-card {
+  .reader-peek__header {
     align-items: flex-start;
   }
 
