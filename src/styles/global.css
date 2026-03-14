@@ -440,10 +440,9 @@ ol {
   line-height: 1.95;
 }
 
-.reader-panel[lang='en'],
-.reader-panel[lang|='en'],
-.reader-peek [lang='en'],
-.reader-peek [lang|='en'] {
+/* Serif for all Latin-script reading panels */
+.reader-panel,
+.reader-peek {
   font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
