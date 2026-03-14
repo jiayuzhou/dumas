@@ -310,6 +310,45 @@ ol {
   padding: clamp(1.5rem, 2vw + 1rem, 2.5rem);
 }
 
+.book-about {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.book-about__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.book-about__meta p {
+  margin: 0;
+}
+
+.book-about__synopsis {
+  color: var(--text);
+  line-height: 1.7;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.book-about__synopsis p {
+  margin: 0 0 0.6rem;
+}
+
+.book-about__synopsis p:last-child {
+  margin-bottom: 0;
+}
+
+.book-about__copyright {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  margin: 0;
+}
+
 .chapter-card {
   display: flex;
   flex-direction: column;

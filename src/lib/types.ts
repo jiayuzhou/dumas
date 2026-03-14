@@ -87,9 +87,17 @@ export interface ChapterData {
   sentenceToUnit: Record<LanguageCode, Record<string, string>>;
 }
 
+export interface BookAbout {
+  author?: string;
+  translator?: string;
+  copyright?: string;
+  synopsisHtml: string;
+}
+
 export interface BookData {
   config: BookConfig & { slug: string };
   chapters: ChapterData[];
+  about?: BookAbout;
 }
 
 export interface LibraryData {

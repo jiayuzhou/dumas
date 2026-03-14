@@ -7,8 +7,11 @@ import { marked } from 'marked';
 import { parse as parseYaml } from 'yaml';
 import { z } from 'zod';
 
+import { existsSync } from 'node:fs';
+
 import type {
   AlignmentUnit,
+  BookAbout,
   BookConfig,
   BookData,
   ChapterData,
@@ -162,9 +165,28 @@ async function loadBook(bookDirectory: string, directoryName: string): Promise<B
     chapters.push(await loadChapter(config, chapterStem, group.chapterFiles, group.unitsPath));
   }
 
+  const about = await loadAbout(bookDirectory);
+
   return {
     config,
-    chapters
+    chapters,
+    ...(about ? { about } : {})
+  };
+}
+
+async function loadAbout(bookDirectory: string): Promise<BookAbout | undefined> {
+  const aboutPath = path.join(bookDirectory, 'about.md');
+  if (!existsSync(aboutPath)) return undefined;
+
+  const raw = await readFile(aboutPath, 'utf8');
+  const { data, content } = matter(raw);
+  const synopsisHtml = String(await Promise.resolve(marked.parse(content))).trim();
+
+  return {
+    author: typeof data.author === 'string' ? data.author : undefined,
+    translator: typeof data.translator === 'string' ? data.translator : undefined,
+    copyright: typeof data.copyright === 'string' ? data.copyright : undefined,
+    synopsisHtml
   };
 }
 

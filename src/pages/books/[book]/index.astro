@@ -42,13 +42,30 @@ const pageDescription =
       )}
     </div>
 
-    {
-      (book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]) && (
-        <p class="lead">
-          {book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]}
-        </p>
-      )
-    }
+    {book.about && (
+      <div class="book-about">
+        <div class="book-about__meta">
+          {book.about.author && (
+            <p><strong>Author:</strong> {book.about.author}</p>
+          )}
+          {book.about.translator && (
+            <p><strong>Translator:</strong> {book.about.translator}</p>
+          )}
+        </div>
+        {book.about.synopsisHtml && (
+          <div class="book-about__synopsis" set:html={book.about.synopsisHtml} />
+        )}
+        {book.about.copyright && (
+          <p class="book-about__copyright">{book.about.copyright}</p>
+        )}
+      </div>
+    )}
+
+    {!book.about && (book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]) && (
+      <p class="lead">
+        {book.config.summary?.[book.config.defaultPrimary] ?? Object.values(book.config.summary ?? {})[0]}
+      </p>
+    )}
 
     <section class="chapter-list stack-md">
       <h2>Chapters</h2>
