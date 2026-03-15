@@ -74,6 +74,12 @@ export interface ChapterLanguageDocument {
   sentences: Record<string, SentenceRecord>;
 }
 
+export interface SentenceAnnotation {
+  sentence: string;
+  label?: string;
+  text: string;
+}
+
 export interface ChapterData {
   bookId: string;
   bookSlug: string;
@@ -85,6 +91,7 @@ export interface ChapterData {
   languages: Record<LanguageCode, ChapterLanguageDocument>;
   units: AlignmentUnit[];
   sentenceToUnit: Record<LanguageCode, Record<string, string>>;
+  annotations: SentenceAnnotation[];
 }
 
 export interface BookAbout {

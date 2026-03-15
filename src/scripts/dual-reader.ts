@@ -3,6 +3,7 @@ import type {
   ChapterData,
   LanguageMeta,
   ReaderSettings,
+  SentenceAnnotation,
   SentenceRecord
 } from '../lib/types';
 
@@ -59,6 +60,12 @@ function mountDualReader(root: HTMLElement) {
   const payload = JSON.parse(payloadNode.textContent ?? '{}') as ReaderPayload;
   const languageMap = new Map(payload.languages.map((language) => [language.code, language]));
   const unitMap = new Map(payload.chapter.units.map((unit) => [unit.id, unit]));
+  const annotationMap = new Map<string, SentenceAnnotation[]>();
+  for (const annotation of payload.chapter.annotations ?? []) {
+    const existing = annotationMap.get(annotation.sentence) ?? [];
+    existing.push(annotation);
+    annotationMap.set(annotation.sentence, existing);
+  }
   const storageKey = `dual-reader:${payload.chapter.bookId}`;
 
   const saved = readSavedSettings(storageKey, payload.languages.map((language) => language.code));
@@ -201,6 +208,20 @@ function mountDualReader(root: HTMLElement) {
     button.dataset.sentenceId = sentence.id;
     button.dataset.unitId = payload.chapter.sentenceToUnit[languageCode]?.[sentence.id] ?? '';
     button.innerHTML = sentence.html;
+
+    const unitId = payload.chapter.sentenceToUnit[languageCode]?.[sentence.id];
+    const unit = unitId ? unitMap.get(unitId) : undefined;
+    const allSentenceIds = unit ? Object.values(unit.parts).flat() : [sentence.id];
+    const hasAnnotations = allSentenceIds.some((id) => annotationMap.has(id));
+    if (hasAnnotations) {
+      const count = allSentenceIds.reduce((sum, id) => sum + (annotationMap.get(id)?.length ?? 0), 0);
+      const indicator = document.createElement('span');
+      indicator.className = 'reader-annotation-badge';
+      indicator.textContent = String(count);
+      indicator.setAttribute('aria-label', `${count} note${count > 1 ? 's' : ''}`);
+      button.append(indicator);
+    }
+
     button.addEventListener('click', () => {
       selectSentence(languageCode, sentence.id, languageCode === state.primary);
     });
@@ -279,6 +300,33 @@ function mountDualReader(root: HTMLElement) {
       note.className = 'peek-note';
       note.textContent = unit.note;
       peekPanel.append(note);
+    }
+
+    const allUnitSentenceIds = Object.values(unit.parts).flat();
+    const annotations = allUnitSentenceIds.flatMap((id) => annotationMap.get(id) ?? []);
+    if (annotations.length > 0) {
+      const section = document.createElement('div');
+      section.className = 'peek-annotations';
+      const heading = document.createElement('p');
+      heading.className = 'peek-annotations__heading';
+      heading.textContent = 'Notes';
+      section.append(heading);
+      for (const annotation of annotations) {
+        const item = document.createElement('div');
+        item.className = 'peek-annotation';
+        if (annotation.label) {
+          const label = document.createElement('span');
+          label.className = 'peek-annotation__label';
+          label.textContent = annotation.label;
+          item.append(label);
+        }
+        const text = document.createElement('p');
+        text.className = 'peek-annotation__text';
+        text.textContent = annotation.text;
+        item.append(text);
+        section.append(item);
+      }
+      peekPanel.append(section);
     }
   }
 

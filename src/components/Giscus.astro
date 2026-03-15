@@ -1,0 +1,31 @@
+---
+interface Props {
+  term?: string;
+}
+
+const { term } = Astro.props;
+---
+
+<section class="giscus-wrapper card" style="padding: clamp(1rem, 2vw, 2rem);">
+  <h2 style="margin: 0 0 1rem; font-size: 1.2rem;">Discussion</h2>
+  <div class="giscus"></div>
+</section>
+
+<script
+  src="https://giscus.app/client.js"
+  data-repo="jiayuzhou/dumas"
+  data-repo-id=""
+  data-category=""
+  data-category-id=""
+  data-mapping={term ? 'specific' : 'pathname'}
+  data-term={term ?? ''}
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="top"
+  data-theme="preferred_color_scheme"
+  data-lang="en"
+  data-loading="lazy"
+  crossorigin="anonymous"
+  async
+></script>

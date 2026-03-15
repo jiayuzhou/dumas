@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../../components/BaseLayout.astro';
+import Giscus from '../../../../components/Giscus.astro';
 import ReaderShell from '../../../../components/ReaderShell.astro';
 import { getLibrary } from '../../../../lib/library';
 import { withBase } from '../../../../lib/paths';
@@ -49,4 +50,6 @@ const pageDescription =
     defaultPrimary={book.config.defaultPrimary}
     defaultSecondary={book.config.defaultSecondary}
   />
+
+  <Giscus />
 </BaseLayout>

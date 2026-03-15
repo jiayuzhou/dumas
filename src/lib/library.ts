@@ -19,6 +19,7 @@ import type {
   ChapterLanguageDocument,
   LibraryData,
   ReaderBlock,
+  SentenceAnnotation,
   SentenceRecord
 } from './types';
 
@@ -111,12 +112,24 @@ async function loadBook(bookDirectory: string, directoryName: string): Promise<B
     {
       chapterFiles: Map<string, string>;
       unitsPath?: string;
+      notesPath?: string;
     }
   >();
 
   for (const file of files) {
     if (!file.isFile()) continue;
-    if (file.name === 'book.yml') continue;
+    if (file.name === 'book.yml' || file.name === 'about.md') continue;
+
+    const notesMatch = file.name.match(/^(.*)\.notes\.ya?ml$/);
+    if (notesMatch) {
+      const chapterStem = notesMatch[1];
+      const current = chapterGroups.get(chapterStem) ?? {
+        chapterFiles: new Map<string, string>()
+      };
+      current.notesPath = path.join(bookDirectory, file.name);
+      chapterGroups.set(chapterStem, current);
+      continue;
+    }
 
     const unitsMatch = file.name.match(/^(.*)\.units\.ya?ml$/);
     if (unitsMatch) {
@@ -162,7 +175,7 @@ async function loadBook(bookDirectory: string, directoryName: string): Promise<B
       }
     }
 
-    chapters.push(await loadChapter(config, chapterStem, group.chapterFiles, group.unitsPath));
+    chapters.push(await loadChapter(config, chapterStem, group.chapterFiles, group.unitsPath, group.notesPath));
   }
 
   const about = await loadAbout(bookDirectory);
@@ -230,7 +243,8 @@ async function loadChapter(
   bookConfig: BookData['config'],
   chapterStem: string,
   chapterFiles: Map<string, string>,
-  unitsPath: string
+  unitsPath: string,
+  notesPath?: string
 ): Promise<ChapterData> {
   const languages: Record<string, ChapterLanguageDocument> = {};
   const titles: Record<string, string> = {};
@@ -297,6 +311,8 @@ async function loadChapter(
     }
   }
 
+  const annotations = notesPath ? await parseNotesFile(notesPath) : [];
+
   const derivedOrder =
     order ??
     Number.parseInt(chapterStem.match(/^\d+/)?.[0] ?? '', 10) ??
@@ -312,7 +328,8 @@ async function loadChapter(
     descriptions,
     languages,
     units,
-    sentenceToUnit
+    sentenceToUnit,
+    annotations
   };
 }
 
@@ -518,5 +535,39 @@ async function parseUnitsFile(filePath: string, allowedLanguages: string[]): Pro
       note: typeof note === 'string' ? note : undefined,
       parts
     } satisfies AlignmentUnit;
+  });
+}
+
+async function parseNotesFile(filePath: string): Promise<SentenceAnnotation[]> {
+  const raw = await readFile(filePath, 'utf8');
+  const parsed = parseYaml(raw) as unknown;
+
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error(`Notes file ${filePath} must contain an object with a top-level "notes" array.`);
+  }
+
+  const rawNotes = (parsed as { notes?: unknown }).notes;
+  if (!Array.isArray(rawNotes)) {
+    throw new Error(`Notes file ${filePath} must contain a top-level "notes" array.`);
+  }
+
+  return rawNotes.map((entry, index) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      throw new Error(`Note entry #${index + 1} in ${filePath} must be an object.`);
+    }
+
+    const { sentence, label, text } = entry as Record<string, unknown>;
+    if (typeof sentence !== 'string' || !sentence.trim()) {
+      throw new Error(`Note entry #${index + 1} in ${filePath} must include a non-empty "sentence" field.`);
+    }
+    if (typeof text !== 'string' || !text.trim()) {
+      throw new Error(`Note entry #${index + 1} in ${filePath} must include a non-empty "text" field.`);
+    }
+
+    return {
+      sentence,
+      label: typeof label === 'string' ? label : undefined,
+      text
+    } satisfies SentenceAnnotation;
   });
 }
